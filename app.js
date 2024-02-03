@@ -19,10 +19,6 @@ const io = new Server(server, {
 
 app.use(cors())
 
-app.get('/' , (req, res) => {
-    console.log('corriendo');
-})
-
 let conecctionUser = 0
 io.on('connect', async (socket) => {
     console.log('Usuario Conectado')
@@ -33,9 +29,6 @@ io.on('connect', async (socket) => {
 
     socket.on('disconnect', () => {
         conecctionUser -= 1;
-        if (conecctionUser < 0) {
-            conecctionUser = 0
-        }
         io.emit('UserConnection', conecctionUser.toString());
 
         console.log('Usuario desconectado');
@@ -61,10 +54,10 @@ io.on('connect', async (socket) => {
                         args: { id_user: id_user }
                     })
                     if (user.rows) {
-                        socket.emit('Registro correcto', user.rows[0].id_user.toString(), user.rows[0].name.toString(), user.rows[0].apellido.toString(), user.rows[0].user.toString())
+                        socket.emit('Registro correcto', user.rows[0].id_user.toString(), user.rows[0].name, user.rows[0].apellido, user.rows[0].user)
                     }
                 } catch (error) {
-
+                    console.error(error)
                 }
             }
         } catch (error) {
