@@ -65,6 +65,24 @@ io.on('connect', async (socket) => {
         }
     })
 
+    socket.on('Sesion', async (user) => {
+        let result
+        try {
+            result = await conection.execute({
+                sql: 'SELECT * FROM users WHERE user = :user',
+                args: { user: user }
+            })
+            if (result.rows.length > 0) {
+                socket.emit('Sesion Correcto',  result.rows[0].id_user.toString(), result.rows[0].name, result.rows[0].apellido, result.rows[0].user)
+            } else {
+                let fail = 'Sesion Fail'
+                socket.emit('Sesion Fail', fail, result.rows )
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    })
+
     socket.on('Guardar Mensaje', async (message, dateNow, userName) => {
         let result
         if (message) {
