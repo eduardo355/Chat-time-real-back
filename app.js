@@ -15,7 +15,7 @@ const server = createServer(app)
 const io = new Server(server, {
     connectionStateRecovery: {}
 })
-app.use(cors())
+app.use(cors());
 endPoint(io)
 app.use(logger('dev'))
 server.listen(port, '0.0.0.0', () => {
